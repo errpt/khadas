@@ -5,6 +5,12 @@
       "url": "https://www.ifanr.com/feed",
       "enabled": true,
       "category": "科技"
+    },
+    {
+      "name": "新智元",
+      "url": "https://rsshub.app/wechat/mp/AI20230710",
+      "enabled": true,
+      "category": "微信公众号"
     }
   ],
   "settings": {
@@ -12,6 +18,6 @@
     "maxItemsPerFeed": 5,
     "pushTime": "09:00",
     "pushTimeZone": "Asia/Shanghai",
-    "includeCategories": ["科技", "全部"]
+    "includeCategories": ["科技", "微信公众号", "全部"]
   }
 }
