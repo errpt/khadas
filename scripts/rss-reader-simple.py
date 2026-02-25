@@ -289,12 +289,26 @@ def main():
         report = generate_report(new_entries, config)
 
         if report:
+            # 使用日期时间作为文件名
+            now = datetime.now(timezone.utc)
+            now_cn = now.replace(hour=now.hour + 8)
+            timestamp = now_cn.strftime('%Y%m%d-%H%M')
+            report_filename = f"rss-report-{timestamp}.md"
+
             # 保存报告
-            report_file = Path(__file__).parent.parent / "rss-report.md"
+            report_file = Path(__file__).parent.parent / "reports" / report_filename
+            report_file.parent.mkdir(exist_ok=True)
+
             with open(report_file, 'w', encoding='utf-8') as f:
                 f.write(report)
 
+            # 同时保存最新报告的副本
+            latest_report = Path(__file__).parent.parent / "rss-report-latest.md"
+            with open(latest_report, 'w', encoding='utf-8') as f:
+                f.write(report)
+
             print(f"📝 报告已保存到: {report_file}")
+            print(f"📝 最新报告副本: {latest_report}")
             print(f"\n💡 告诉我 '发送 RSS 报告' 即可推送到飞书\n")
     else:
         print("\n✅ 没有新文章\n")

@@ -4,8 +4,11 @@
 # RSS 状态文件（已读文章记录）
 rss-state.json
 
-# 临时报告
-rss-report.md
+# 历史报告（只保留最新）
+reports/rss-report-*.md
+
+# 最新报告的副本（可选，如果不想提交可以保留在 git 中）
+# rss-report-latest.md
 
 # Python 缓存
 __pycache__/
@@ -26,4 +29,4 @@ Thumbs.db
 *.sublime-*
 
 # 日志文件
-*.log
+logs/*.log
