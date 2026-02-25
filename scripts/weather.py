@@ -7,7 +7,6 @@
 import sys
 import json
 import urllib.request
-import urllib.parse
 from datetime import datetime
 
 def get_weather(city="Beijing"):
@@ -22,6 +21,9 @@ def get_weather(city="Beijing"):
         "Chengdu": (30.5728, 104.0668, "成都"),
         "Wuhan": (30.5928, 114.3055, "武汉"),
         "Nanjing": (32.0603, 118.7969, "南京"),
+        "Fuzhou": (26.0745, 119.2965, "福州"),
+        "Xiamen": (24.4798, 118.0894, "厦门"),
+        "Xian": (34.3416, 108.9398, "西安"),
     }
 
     # 城市名查找（支持中英文）
@@ -105,11 +107,10 @@ if __name__ == "__main__":
     else:
         print(f"❌ 未找到城市：{city}")
         print("\n支持的城市：")
-        print("  - Beijing (北京)")
-        print("  - Shanghai (上海)")
-        print("  - Guangzhou (广州)")
-        print("  - Shenzhen (深圳)")
-        print("  - Hangzhou (杭州)")
-        print("  - Chengdu (成都)")
-        print("  - Wuhan (武汉)")
-        print("  - Nanjing (南京)")
+        for key, (_, _, name) in {
+            "Beijing": None, "Shanghai": None, "Guangzhou": None,
+            "Shenzhen": None, "Hangzhou": None, "Chengdu": None,
+            "Wuhan": None, "Nanjing": None, "Fuzhou": None,
+            "Xiamen": None, "Xian": None
+        }.items():
+            print(f"  - {key} ({name})")
