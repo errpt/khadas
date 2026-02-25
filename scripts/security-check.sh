@@ -31,13 +31,22 @@ echo "" >> /tmp/security-audit.txt
 echo "监听端口：" >> /tmp/security-audit.txt
 ss -ltnp | grep -E "LISTEN.*:(22|5555|18789)" >> /tmp/security-audit.txt
 echo "" >> /tmp/security-audit.txt
-echo "UFW 状态：" >> /tmp/security-audit.txt
-ufw status verbose >> /tmp/security-audit.txt
+echo "防火墙状态：" >> /tmp/security-audit.txt
+if command -v ufw &> /dev/null; then
+    ufw status verbose >> /tmp/security-audit.txt 2>&1
+else
+    echo "UFW 未安装" >> /tmp/security-audit.txt
+fi
 
 # 保存最新报告副本
 cp /tmp/security-audit.txt "$REPORT_DIR/security-report-latest.txt"
 
 # 生成 Markdown 格式报告
+UFW_STATUS="未安装"
+if command -v ufw &> /dev/null; then
+    UFW_STATUS=$(ufw status verbose 2>&1)
+fi
+
 cat > "$REPORT_FILE" << EOF
 # 安全检查报告
 
@@ -68,7 +77,7 @@ $(ss -ltnp | grep -E "LISTEN.*:(22|5555|18789)")
 
 **UFW 防火墙**：
 \`\`\`
-$(ufw status verbose)
+$UFW_STATUS
 \`\`\`
 
 ---
