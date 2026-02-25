@@ -1,0 +1,17 @@
+{
+  "feeds": [
+    {
+      "name": "爱范儿",
+      "url": "https://www.ifanr.com/feed",
+      "enabled": true,
+      "category": "科技"
+    }
+  ],
+  "settings": {
+    "checkIntervalMinutes": 240,
+    "maxItemsPerFeed": 5,
+    "pushTime": "09:00",
+    "pushTimeZone": "Asia/Shanghai",
+    "includeCategories": ["科技", "全部"]
+  }
+}

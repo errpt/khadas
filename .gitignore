@@ -1,0 +1,29 @@
+# OpenClaw 运行时文件
+.openclaw/
+
+# RSS 状态文件（已读文章记录）
+rss-state.json
+
+# 临时报告
+rss-report.md
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE 配置
+.vscode/
+.idea/
+*.sublime-*
+
+# 日志文件
+*.log
