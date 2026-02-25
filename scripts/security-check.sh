@@ -37,16 +37,71 @@ ufw status verbose >> /tmp/security-audit.txt
 # 保存最新报告副本
 cp /tmp/security-audit.txt "$REPORT_DIR/security-report-latest.txt"
 
+# 生成 Markdown 格式报告
+cat > "$REPORT_FILE" << EOF
+# 安全检查报告
+
+**检查时间**：$(date '+%Y-%m-%d %H:%M:%S UTC')
+**设备**：Khadas (Ubuntu 24.04)
+
+---
+
+## 检查摘要
+
+\`\`\`
+$(cat /tmp/security-audit.txt)
+\`\`\`
+
+---
+
+## 系统状态
+
+**磁盘使用**：
+\`\`\`
+$(df -h /)
+\`\`\`
+
+**监听端口**：
+\`\`\`
+$(ss -ltnp | grep -E "LISTEN.*:(22|5555|18789)")
+\`\`\`
+
+**UFW 防火墙**：
+\`\`\`
+$(ufw status verbose)
+\`\`\`
+
+---
+
+*报告位置：$REPORT_FILE*
+EOF
+
 # 记录日志
 echo "✅ 安全检查完成" >> "$LOG_DIR/security-check.log"
 echo "报告保存到: $REPORT_FILE" >> "$LOG_DIR/security-check.log"
 
-# 如果有严重问题，记录到日志
-if grep -q "CRITICAL" /tmp/security-audit.txt; then
-    echo "⚠️  发现严重问题！" >> "$LOG_DIR/security-check.log"
-fi
+# 统计问题
+CRITICAL_COUNT=$(grep -c "CRITICAL" /tmp/security-audit.txt || echo "0")
+WARN_COUNT=$(grep -c "^WARN" /tmp/security-audit.txt || echo "0")
 
-# TODO: 推送到飞书知识库
-# echo "📤 推送报告到飞书..." >> "$LOG_DIR/security-check.log"
+# 生成飞书消息
+FEISHU_MESSAGE="# 🔒 安全检查报告 - $(date '+%Y-%m-%d')
+
+**检查时间**：$(date '+%H:%M') UTC
+**发现问题**：$CRITICAL_COUNT 个严重 · $WARN_COUNT 个警告
+
+---
+📊 **完整报告**：\`$REPORT_FILE\`
+
+---
+🤖 由 OpenClaw 自动生成"
+
+# 保存消息到文件，便于后续发送
+echo "$FEISHU_MESSAGE" > "$WORKSPACE/security-alert.txt"
+
+# 如果有严重问题，记录到日志
+if [ "$CRITICAL_COUNT" -gt 0 ]; then
+    echo "⚠️  发现 $CRITICAL_COUNT 个严重问题！" >> "$LOG_DIR/security-check.log"
+fi
 
 echo "============================================================" >> "$LOG_DIR/security-check.log"
